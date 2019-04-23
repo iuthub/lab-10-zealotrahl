@@ -54,16 +54,20 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', 'localhost'),
+            'host' => env('DB_HOST', 'remotemysql.com'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'database' => env('DB_DATABASE', 'Aasqc56Khu'),
+            'username' => env('DB_USERNAME', 'Aasqc56Khu'),
+            'password' => env('DB_PASSWORD', 'tFEGhXyYk5'),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
             'strict' => true,
             'engine' => null,
+            "modes" => [
+                "ONLY_FULL_GROUP_BY",
+                "STRICT_TRANS_TABLES", "NO_ZERO_IN_DATE", "NO_ZERO_DATE", "ERROR_FOR_DIVISION_BY_ZERO", 'NO_ENGINE_SUBSTITUTION'
+            ],
         ],
 
         'pgsql' => [

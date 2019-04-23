@@ -7,6 +7,9 @@ use App\Post;
 use App\Tag;
 use Illuminate\Http\Request;
 
+use Auth;
+use Gate;
+
 class PostController extends Controller
 {
     public function getIndex()
@@ -56,7 +59,8 @@ class PostController extends Controller
         ]);
         $post = new Post([
             'title' => $request->input('title'),
-            'content' => $request->input('content')
+            'content' => $request->input('content'),
+            "user_id" => \Auth::user()->id,
         ]);
         $post->save();
         $post->tags()->attach($request->input('tags') === null ? [] : $request->input('tags'));
@@ -66,6 +70,7 @@ class PostController extends Controller
 
     public function postAdminUpdate(Request $request)
     {
+
         $this->validate($request, [
             'title' => 'required|min:5',
             'content' => 'required|min:10'
@@ -73,10 +78,16 @@ class PostController extends Controller
         $post = Post::find($request->input('id'));
         $post->title = $request->input('title');
         $post->content = $request->input('content');
+        $post->user_id = \Auth::user()->id;
         $post->save();
 //        $post->tags()->detach();
 //        $post->tags()->attach($request->input('tags') === null ? [] : $request->input('tags'));
         $post->tags()->sync($request->input('tags') === null ? [] : $request->input('tags'));
+
+        if( Gate::denies("update-post", $post)){
+            return redirect()->back();
+        }
+
         return redirect()->route('admin.index')->with('info', 'Post edited, new Title is: ' . $request->input('title'));
     }
 
